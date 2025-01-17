@@ -1,0 +1,23 @@
+[package]
+name = "chat-server"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = ["http"]
+http = ["axum", "tower-http"]
+
+[dependencies]
+chat-common = { path = "../common" }
+
+quic-session = { git = "https://github.com/Masterchef365/fckweb.git", branch = "main" }
+framework = { git = "https://github.com/Masterchef365/fckweb.git", branch = "main" }
+
+anyhow = "1"
+tokio = { version = "1.40", features = ["full"] }
+env_logger = "0.11.5"
+log = "0.4"
+#static-web-server = { version = "2.33.1", features = ["directory-listing"], optional = true }
+
+tower-http = { version = "0.6.1", features = ["fs"], optional = true }
+axum = { version = "0.7.9", optional = true }

@@ -1,0 +1,10 @@
+[package]
+name = "chat-common"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+framework = { git = "https://github.com/Masterchef365/fckweb.git", branch = "main" }
+serde = { version = "1", features = ["derive"] }
+thiserror = "1.0.64"
+tarpc = { git = "https://github.com/Masterchef365/tarpc.git", branch = "resolver-trouble", features = ["serde1"], default-features = false }
