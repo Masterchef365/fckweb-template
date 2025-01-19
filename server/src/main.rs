@@ -3,6 +3,7 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use chat_common::*;
+use framework::futures::lock::Mutex;
 use framework::futures::{Sink, SinkExt};
 use framework::io::FrameworkError;
 use framework::tarpc::context::Context as TarpcContext;
@@ -89,7 +90,7 @@ struct SharedData {
 }
 
 type MessageSink =
-    Box<dyn Sink<MessageMetaData, Error = FrameworkError> + Send + Sync + Unpin + 'static>;
+    Arc<Mutex<dyn Sink<MessageMetaData, Error = FrameworkError> + Send + Sync + Unpin + 'static>>;
 
 struct Room {
     desc: RoomDescription,
@@ -133,7 +134,7 @@ impl ChatService for ChatServer {
             let room_arc = shared.get_room(&room_name).await?;
             drop(shared);
             let mut room = room_arc.lock().await;
-            room.connected.push(Box::new(sink));
+            room.connected.push(Arc::new(Mutex::new(sink)));
 
             let tx = room.tx.clone();
             drop(room);
@@ -188,18 +189,36 @@ impl Room {
         tokio::spawn(async move {
             // TODO: This is straightforward but slow!
             while let Some(msg) = rx.recv().await {
-                let mut lck = room.lock().await;
-                let mut del_indices = vec![];
+                let lck = room.lock().await;
 
-                for (idx, conn) in lck.connected.iter_mut().enumerate() {
-                    if conn.send(msg.clone()).await.is_err() {
-                        del_indices.push(idx);
+                let mut handles = vec![];
+                for conn in &lck.connected {
+                    let conn = conn.clone();
+                    let ptr = Arc::as_ptr(&conn) as *const () as usize;
+                    let msg = msg.clone();
+                    handles.push(tokio::spawn(async move {
+                        let result = conn.lock().await.send(msg).await;
+                        (ptr, result)
+                    }));
+                }
+
+                drop(lck);
+
+                // This may take awhile, so we've dropped the lock
+                let mut del_indices = std::collections::HashSet::new();
+                for handle in handles {
+                    let (ptr, result) = handle.await.unwrap();
+                    if let Err(e) = result {
+                        log::error!("{}", e);
+                        del_indices.insert(ptr);
                     }
                 }
 
-                while let Some(idx) = del_indices.pop() {
-                    drop(lck.connected.remove(idx));
-                }
+                let mut lck = room.lock().await;
+                lck.connected.retain(|conn| {
+                    let ptr = Arc::as_ptr(&conn) as *const () as usize;
+                    !del_indices.contains(&ptr)
+                });
             }
 
             Ok::<_, anyhow::Error>(())
