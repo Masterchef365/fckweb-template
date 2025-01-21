@@ -1162,7 +1162,7 @@ dependencies = [
 [[package]]
 name = "egui-shortcuts"
 version = "0.1.0"
-source = "git+https://github.com/Masterchef365/fckweb.git?branch=main#3481d4bb87297a6ddfd9c58d5f8d8fd69c1bee94"
+source = "git+https://github.com/Masterchef365/fckweb.git?branch=main#b348f19e8d205f0a0d98fd235d4d1660aac5d6b4"
 dependencies = [
  "egui",
  "poll-promise",
@@ -1460,7 +1460,7 @@ dependencies = [
 [[package]]
 name = "framework"
 version = "0.1.0"
-source = "git+https://github.com/Masterchef365/fckweb.git?branch=main#3481d4bb87297a6ddfd9c58d5f8d8fd69c1bee94"
+source = "git+https://github.com/Masterchef365/fckweb.git?branch=main#b348f19e8d205f0a0d98fd235d4d1660aac5d6b4"
 dependencies = [
  "anyhow",
  "async-stream",
@@ -2060,9 +2060,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.7.0"
+version = "2.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62f822373a4fe84d4bb149bf54e584a7f4abec90e072ed49cda0edea5b95471f"
+checksum = "8c9c992b02b5b4c94ea26e32fe5bccb7aa7d9f390ab5c1221ff895bc7ea8b652"
 dependencies = [
  "equivalent",
  "hashbrown",
@@ -2954,7 +2954,7 @@ checksum = "afbdc74edc00b6f6a218ca6a5364d6226a259d4b8ea1af4a0ea063f27e179f4d"
 [[package]]
 name = "quic-session"
 version = "0.1.0"
-source = "git+https://github.com/Masterchef365/fckweb.git?branch=main#3481d4bb87297a6ddfd9c58d5f8d8fd69c1bee94"
+source = "git+https://github.com/Masterchef365/fckweb.git?branch=main#b348f19e8d205f0a0d98fd235d4d1660aac5d6b4"
 dependencies = [
  "anyhow",
  "log",
@@ -3372,9 +3372,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.136"
+version = "1.0.137"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "336a0c23cf42a38d9eaa7cd22c7040d04e1228a19a933890805ffd00a16437d2"
+checksum = "930cfb6e6abf99298aaad7d29abbef7a9999a9a8806a40088f55f0dcec03146b"
 dependencies = [
  "itoa",
  "memchr",

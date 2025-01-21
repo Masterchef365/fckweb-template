@@ -98,7 +98,7 @@ impl ChatApp {
             // Get framework and channel
             let url = url::Url::parse("https://127.0.0.1:9090/")?;
 
-            let sess = quic_session::client_session(
+            let sess = quic_session::client_session_selfsigned(
                 &url,
                 chat_common::CERTIFICATE.to_vec(),
                 chat_common::CERTIFICATE_HASHES.to_vec(),
