@@ -33,7 +33,7 @@ async fn main() -> Result<()> {
 async fn chat_server() -> Result<()> {
     log::info!("Chat server");
 
-    let endpoint = quic_session::server_endpoint(
+    let mut endpoint = quic_session::server_endpoint(
         "0.0.0.0:9090".parse().unwrap(),
         chat_common::CERTIFICATE.to_vec(),
         DEFINITELY_NOT_THE_PRIVATE_KEY.to_vec(),
